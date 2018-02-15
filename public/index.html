@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Game Shelf</title>
+    <script
+      src="http://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Graduate|Open+Sans" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <main role="main" aria-live="assertive">
+
+      <nav role="navigation" class="nav-header hidden">
+        <div class="Banner">Game Shelf</div> 
+        <ul class="nav-list">
+          <li class="nav-item my-games">My Games</li>
+          <!-- <li class="nav-item friends-games">My Friend's Games</li> -->
+          <li class="nav-item search">Search for Games</li>
+          <li class="nav-item log-out">Log out</li>
+        </ul>
+      </nav>
+
+      <section class="Splash-Page">
+        <h1>
+        GAME SHELF
+        </h1>
+        <h2>
+          <div class="Welcome">
+          Welcome! Sign in to access your Game Shelf. <br> If you dont have an account sign up is easy and free!!!
+            <div class="Welcome-Buttons">
+            <br>
+            <button type="button" class="open-login-button">Login</button>
+            <br>
+            <button type="button" class="open-create-account">Create an Account</button>
+            </div> 
+          </div>
+        </h2>
+      </section>
+
+      <section class="Login-Page hidden">
+        <form class="Login">
+          <h2>Please enter your username and password below</h2>
+          <label for="user-input">Username</label> 
+          <input type=text id="user-input" class="js-user-input"><br>
+          <label for="password-input"> Password</label>
+          <input type=password id="password-input" class="js-password-input"><br>
+          <button type=submit class="login-button">Login</button>
+          <section class="Login-Error"></section>
+          <button type="button" class="login-to-main">Back to the Main Page</button>
+        </form>
+      </section>
+      
+      <section class="Create-Account-Page hidden">
+        <form class="Create-Account">
+          <h2>Please create a username and password below</h2>
+          <label for="user-create">Create a username</label> 
+          <input type=text id="user-create" class="js-user-create"><br>
+          <label for="password-create"> Create a password</label>
+          <input type=password id="password-create" class="js-password-create"><br>
+          <label for="password-confirm"> Confirm password</label>
+          <input type=password id="password-confirm" class="js-password-confirm"><br>
+          <button type=submit class="create-account-button">Create your Account</button><br>
+          <button type="button" class="create-to-main">Back to the Main Page</button>
+        </form>
+      </section>
+    
+      <section class="My-Games hidden">
+        
+      </section>
+    
+    </main>
+    <script src="client.js"></script>
+  </body>
+</html>
