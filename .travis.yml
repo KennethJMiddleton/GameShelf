@@ -1,0 +1,9 @@
+language: node_js
+node_js: node
+deploy:
+  provider: heroku
+  api_key:
+    secure: ILZz2IL3c8Q6G5h86YZZ8cy5gzZ9wpFQPvqug98XutRlslE4TaxQh3Or3BzJSeiHFAu+yui9rPoeX4BzzO8WML/NDO4J+DDx1mC2gYgTFuMolTFdnVXPFZUwL2ELKnq93rEbEXWV8B1XpnpmF053bVK1W65+V6O6YOCDh5WyFuIW/bLBx1nNNISSyctBlFOFHDkq/Ho+cMVUWHXTfW7jHSbGkFo9dQEtthdaFgwcUbda/iW4z9Tyj6zh98rof/N4PumbqNKNM2lEOwwoLSQ/ffiW13l+bcZMbfV79r5zE0DO5eu6TRqgPhe/u1cWYjso0eOw90ufKjNjvWcCsFjxC48lyX+SiiyePz9yGV+QCTOI/9pG1xh5UlzCJP2Dmtu49FExTh8jxAJmLD9/oQV/1HJUy2Y8aCVftpgNj+hX+tn5HYOzbSgfwLCsba2l+HRP1Fpj6Qc75ZOc469CTWUZGZcqFToG0ZV8j39M/lJOUybUhQmlQ6TlzCKbLJMgwNVaYrcAsSm666Z6ks0SQdxAPOQZsNsdCeHSRZ/Jmfl1kGHenYaajlku8J9FUJk+kvqv4AT1BJbAy7MqTYhuwiR2VfBpsUj6XINagZiqpo3zgqnHm5aTEIYVRgzFZssxnrhVwFS+A2PWf7fWTq5bUSSZky5SdMoLDIlkd3LZrkdEsF8=
+  app: GameShelf
+  on:
+    repo: KennethJMiddleton/GameShelf
