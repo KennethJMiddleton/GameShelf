@@ -1,0 +1,26 @@
+{
+  "name": "gameshelf",
+  "version": "1.0.0",
+  "description": "board game inventory system",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KennethJMiddleton/GameShelf.git"
+  },
+  "author": "Kenneth Middleton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KennethJMiddleton/GameShelf/issues"
+  },
+  "homepage": "https://github.com/KennethJMiddleton/GameShelf#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^5.0.5",
+    "morgan": "^1.9.0",
+    "passport": "^0.4.0"
+  }
+}
