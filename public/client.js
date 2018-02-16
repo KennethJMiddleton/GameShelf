@@ -1,3 +1,78 @@
+var Mock_Data = {
+    "games":[
+        {
+            "name" : "Monopoloy",
+            "minPlayers" : 2,
+            "maxPlayers" : 6,
+            "time" : 120,
+            "age" : 8,
+            "coop" : false,
+            "dice" : true,
+            "deckBuilding" : false,
+            "bluffing" : false,
+            "tokenMovement" : true,
+            "tokenPlacement" : true,
+            "setCollecting" : true,
+            "party" : false,
+            "trivia" : false,
+            "expansion" : false            
+        },
+        {
+            "name" : "Clue",
+            "minPlayers" : 3,
+            "maxPlayers" : 6,
+            "time" : 60,
+            "age" : 8,
+            "coop" : false,
+            "dice" : true,
+            "deckBuilding" : false,
+            "bluffing" : false,
+            "tokenMovement" : true,
+            "tokenPlacement" : false,
+            "setCollecting" : false,
+            "party" : false,
+            "trivia" : false,
+            "expansion" : false            
+        },
+        {
+            "name" : "Betrayal at the House on the Hill",
+            "minPlayers" : 3,
+            "maxPlayers" : 6,
+            "time" : 60,
+            "age" : 12,
+            "coop" : true,
+            "dice" : true,
+            "deckBuilding" : false,
+            "bluffing" : false,
+            "tokenMovement" : true,
+            "tokenPlacement" : true,
+            "setCollecting" : false,
+            "party" : false,
+            "trivia" : false,
+            "expansion" : false            
+        },
+        {
+            "name" : "Pandemic",
+            "minPlayers" : 2,
+            "maxPlayers" : 4,
+            "time" : 45,
+            "age" : 8,
+            "coop" : true,
+            "dice" : false,
+            "deckBuilding" : false,
+            "bluffing" : false,
+            "tokenMovement" : true,
+            "tokenPlacement" : true,
+            "setCollecting" : true,
+            "party" : false,
+            "trivia" : false,
+            "expansion" : false            
+        }
+    ]
+}
+
+
+
 function start() {
 	handleLoginButton();
 	handleCreateAccount();
