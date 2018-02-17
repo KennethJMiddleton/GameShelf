@@ -4,7 +4,7 @@
   "description": "board game inventory system",
   "main": "server.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --exit ./test",
     "start": "node server.js"
   },
   "repository": {
