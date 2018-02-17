@@ -72,6 +72,8 @@ var Mock_Data = {
 }
 var serverBase = '//localhost:8080/';
 var USERS_URL = serverBase + 'users';
+var LOGIN_URL = serverBase + 'auth/login';
+var SHELF_URL = serverBase + 'gameshelf';
 
 
 function start() {
@@ -91,25 +93,56 @@ function handleLoginButton() {
 function handleLogin() {
 	$('.Login').on('submit', event => {
 		event.preventDefault();
-		var user = $('#user-input').val();
-		console.log(user);
-		var pass = $('#password-input').val();
-		console.log(pass);
-		if (user === "Kenneth" && pass === "Test") {
-			displayGameShelf();
-		}
-		else {
-			$('.Login-Error').html(`That username and password combination isn't in our system. <br> Please try again or go back and create an account`);
-		}
+		var userName = $('#user-input').val();
+		var pass1 = $('#password-input').val();
+		var user = {
+            "username" : userName,
+            "password" : pass1
+        };
+        $.ajax({
+            method: 'POST',
+            url: LOGIN_URL,
+            data: JSON.stringify(user),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function(data) {
+                localStorage.token = data.authToken;
+                displayGameShelf(localStorage.token);
+            },
+            error: function(error) {
+                console.log(error);
+                $('.Login-Error').html("That username and password combination are not in our system. Please try again");
+            }
+        });
+
 	});
 }
 
-function displayGameShelf() {
+function displayGameShelf(token) {
 	$('.Login-Error').empty();
-    $('.Login-Page').addClass("hidden");
-    $('.Create-Account-Page').addClass("hidden");
-	$('.Splash-Page').addClass("hidden");
-	$('.nav-header').removeClass("hidden");
+    $.ajax({
+        method: 'GET',
+        url: SHELF_URL,
+        beforeSend: function(xhr) {
+            if (localStorage.token) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
+            }
+          },
+        success: function(data) {
+            $('.Login-Page').addClass("hidden");
+            $('.Create-Account-Page').addClass("hidden");
+	        $('.Splash-Page').addClass("hidden");
+            $('.nav-header').removeClass("hidden");
+        },
+        error: function() {
+            alert("Sorry, you are not logged in.");
+            $('.Login-Page').addClass("hidden");
+            $('.Create-Account-Page').addClass("hidden");
+            $('.Splash-Page').removeClass("hidden");
+            $('.Welcome').removeClass("hidden");
+            $('.nav-header').addClass("hidden");
+        }
+    });
 }
 
 function handleReturnFromLogin() {
@@ -148,7 +181,20 @@ function handleCreation() {
                 contentType: 'application/json',
                 success: function(data) {
                   if (data.username===user.username){
-                    displayGameShelf();
+                    $.ajax({
+                        method: 'POST',
+                        url: LOGIN_URL,
+                        data: JSON.stringify(user),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function(data) {
+                            localStorage.token = data.authToken;
+                            displayGameShelf(localStorage.token);
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
                   }
                 },
                 error: function(error) {

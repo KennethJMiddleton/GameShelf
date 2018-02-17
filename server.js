@@ -7,6 +7,7 @@ const passport = require('passport');
 
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
+const { router: shelfRouter } = require('./gameshelf');
 
 mongoose.Promise = global.Promise;
 
@@ -35,6 +36,9 @@ app.use('/users/', usersRouter);
 app.use('/auth/', authRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
+
+app.use('/gameshelf', jwtAuth, shelfRouter);
+
 
 let server;
 
