@@ -144,13 +144,17 @@ function handleCreation() {
                 method: 'POST',
                 url: USERS_URL,
                 data: JSON.stringify(user),
+                dataType: 'json',
+                contentType: 'application/json',
                 success: function(data) {
                   if (data.username===user.username){
                     displayGameShelf();
                   }
                 },
-                dataType: 'json',
-                contentType: 'application/json'
+                error: function(error) {
+                    console.log(error);
+                    $('.Create-Error').html(error.responseJSON.message);
+                }
               });
         };
 	});
