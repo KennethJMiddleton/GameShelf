@@ -70,7 +70,8 @@ var Mock_Data = {
         }
     ]
 }
-
+var serverBase = '//localhost:8080/';
+var USERS_URL = serverBase + 'users';
 
 
 function start() {
@@ -105,7 +106,8 @@ function handleLogin() {
 
 function displayGameShelf() {
 	$('.Login-Error').empty();
-	$('.Login-Page').addClass("hidden");
+    $('.Login-Page').addClass("hidden");
+    $('.Create-Account-Page').addClass("hidden");
 	$('.Splash-Page').addClass("hidden");
 	$('.nav-header').removeClass("hidden");
 }
@@ -130,12 +132,27 @@ function handleCreateAccount() {
 function handleCreation() {
 	$('.Create-Account').on('submit', event => {
 		event.preventDefault();
-		var user = $('#user-create').val();
-		console.log(user);
+		var userName = $('#user-create').val();
 		var pass1 = $('#password-create').val();
-		console.log(pass1);
-		var pass2 = $('#password-confirm').val();
-		console.log(pass2);
+        var pass2 = $('#password-confirm').val();
+        if (pass1 === pass2) {
+            var user = {
+                "username" : userName,
+                "password" : pass1
+            };
+            $.ajax({
+                method: 'POST',
+                url: USERS_URL,
+                data: JSON.stringify(user),
+                success: function(data) {
+                  if (data.username===user.username){
+                    displayGameShelf();
+                  }
+                },
+                dataType: 'json',
+                contentType: 'application/json'
+              });
+        };
 	});
 }
 
