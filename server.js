@@ -1,6 +1,7 @@
 'use strict';
 require('dotenv').config();
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
@@ -8,12 +9,14 @@ const passport = require('passport');
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 const { router: shelfRouter } = require('./gameshelf');
+const { router: gameRouter } = require('./games');
 
 mongoose.Promise = global.Promise;
 
 const { PORT, DATABASE_URL } = require('./config');
 
 const app = express();
+app.use(bodyParser.json());
 
 app.use(morgan('common'));
 
@@ -35,10 +38,11 @@ passport.use(jwtStrategy);
 app.use('/users/', usersRouter);
 app.use('/auth/', authRouter);
 
+
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 app.use('/gameshelf', jwtAuth, shelfRouter);
-
+app.use('/games', gameRouter);
 
 let server;
 

@@ -1,7 +1,7 @@
 var Mock_Data = {
     "games":[
         {
-            "name" : "Monopoloy",
+            "name" : "Monopoly",
             "minPlayers" : 2,
             "maxPlayers" : 6,
             "time" : 120,
@@ -76,6 +76,7 @@ var LOGIN_URL = serverBase + 'auth/login';
 var SHELF_URL = serverBase + 'gameshelf';
 
 
+
 function start() {
 	handleLoginButton();
 	handleCreateAccount();
@@ -133,6 +134,8 @@ function displayGameShelf(token) {
             $('.Create-Account-Page').addClass("hidden");
 	        $('.Splash-Page').addClass("hidden");
             $('.nav-header').removeClass("hidden");
+            $('.My-Games').removeClass("hidden");
+            renderShelf(data);
         },
         error: function() {
             alert("Sorry, you are not logged in.");
@@ -141,9 +144,22 @@ function displayGameShelf(token) {
             $('.Splash-Page').removeClass("hidden");
             $('.Welcome').removeClass("hidden");
             $('.nav-header').addClass("hidden");
+            $('.My-Games').addClass("hidden");
         }
     });
 }
+
+function renderShelf(gamelist) {
+    $('.js-game list').html(`<span class="sr-only">Loading...</span>`);
+    var tokenData = parseJwt(localStorage.token);
+    console.log(tokenData.user.username);    
+}
+
+function parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace('-', '+').replace('_', '/');
+    return JSON.parse(window.atob(base64));
+};
 
 function handleReturnFromLogin() {
 	$('.login-to-main').on('click', event => {
