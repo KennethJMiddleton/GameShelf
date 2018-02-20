@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const {User} = require('./models');
+const {Shelf} = require('../gameshelf');
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  const stringFields = ['username', 'password', 'firstName', 'lastName'];
+  const stringFields = ['username', 'password', 'firstName', 'lastName', 'myShelf'];
   const nonStringField = stringFields.find(
     field => field in req.body && typeof req.body[field] !== 'string'
   );
@@ -83,10 +84,15 @@ router.post('/', jsonParser, (req, res) => {
     });
   }
 
-  let {username, password, firstName = '', lastName = ''} = req.body;
+  let {username, password, firstName = '', lastName = '', myShelf = '', friendsShelfs = ['']} = req.body;
   firstName = firstName.trim();
   lastName = lastName.trim();
 
+  return Shelf
+  .create({
+    games: []
+  })
+  .then(shelf => {  
   return User
     .find({username})
     .count()
@@ -106,7 +112,9 @@ router.post('/', jsonParser, (req, res) => {
         username,
         password: hash,
         firstName,
-        lastName
+        lastName,
+        myShelf: shelf._id,
+        friendsShelfs,
       });
     })
     .then(user => {
@@ -118,6 +126,23 @@ router.post('/', jsonParser, (req, res) => {
       }
       res.status(500).json({code: 500, message: 'Internal server error'});
     });
+  });  
+});
+
+router.put('/:id', (req, res) => {
+  const toUpdate = {};
+  const updateableFields = ['firstName', 'lastName', 'myShelf', 'friendsShelfs'];
+
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      toUpdate[field] = req.body[field];
+    }
+  });
+
+  User
+    .findByIdAndUpdate(req.params.id, { $set: toUpdate })
+    .then(post => res.status(201).json(post.serialize()))
+    .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
 module.exports = {router};

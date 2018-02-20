@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
     Game
       .find()
-      .then(game => {console.log(game); res.json(
+      .then(game => {res.json(
         game.map(item => item.serialize())
       )})
       .catch(err => {
@@ -24,7 +24,6 @@ router.get('/', (req, res) => {
     const requiredFields = ['name', 'minPlayers', 'maxPlayers', 'time', 'age', 'coop', 'dice', 'deckBuilding', 'bluffing', 'tokenMovement', 'tokenPlacement', 'setCollecting', 'party', 'trivia', 'expansion'];
     for (let i = 0; i < requiredFields.length; i++) {
       const field = requiredFields[i];
-      console.log(req);
       if (!(field in req.body)) {
         const message = `Missing \`${field}\` in request body`;
         console.error(message);
