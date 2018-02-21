@@ -21,7 +21,7 @@ const gameSchema = mongoose.Schema({
     trivia : Boolean,
     expansion : Boolean
   });
-  
+
   gameSchema.methods.serialize = function() {
     return {
         id: this.id,

@@ -61,7 +61,7 @@ function displayGameShelf(token) {
             $('.My-Games').removeClass("hidden");
             renderShelf(data);
         },
-        error: function() {
+        error: function(error) {
             alert("Sorry, you are not logged in.");
             $('.Login-Page').addClass("hidden");
             $('.Create-Account-Page').addClass("hidden");
@@ -74,8 +74,23 @@ function displayGameShelf(token) {
 }
 
 function renderShelf(gamelist) {
-    $('.js-game list').html(`<span class="sr-only">Loading...</span>`);
-    var tokenData = parseJwt(localStorage.token);   
+    $('.js-game-list').html(`<span class="sr-only">Loading...</span>`);
+    var tokenData = parseJwt(localStorage.token);
+    $.ajax({
+        method: 'GET',
+        url: SHELF_URL + '/' + tokenData.user.myShelf,
+        beforeSend: function(xhr) {
+            if (localStorage.token) {
+              xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
+            }
+          },
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(error) {
+            
+        }
+    });
 }
 
 function parseJwt (token) {
