@@ -2,6 +2,7 @@ var serverBase = '//localhost:8080/';
 var USERS_URL = serverBase + 'users';
 var LOGIN_URL = serverBase + 'auth/login';
 var SHELF_URL = serverBase + 'gameshelf';
+const GAME_TABLE = `<table><tr><th>Game</th><th>Min Players</th><th>Max Players</th><th>Play Time</th><th>Age to Play</th><th>Co-Op</th><th>Uses Dice</th><th>Deck Building</th><th>Bluffing</th><th>Token Movement</th><th>Token Placement</th><th>Set Collecting</th><th>Party Game</th><th>Trivia Game</th><th>Expansion</th></tr><tbody class = "myTable"></tbody></table>`
 
 function start() {
 	handleLoginButton();
@@ -85,7 +86,14 @@ function renderShelf(gamelist) {
             }
           },
         success: function(data) {
-            console.log(data);
+            const gameList = data.map(game =>renderGame(game));
+            if(data.length === 0) {
+                $('.js-game-list').html("You don't have any games on your shelf yet. You should click on 'Search for Games' above and fix that.")
+            }
+            else{
+                $('.js-game-list').html(GAME_TABLE)
+                $('.myTable').html(gameList);
+            }
         },
         error: function(error) {
             
@@ -97,7 +105,13 @@ function parseJwt (token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace('-', '+').replace('_', '/');
     return JSON.parse(window.atob(base64));
-};
+}
+
+function renderGame (game) {
+    return `
+    <tr><td>${game.name}</td><td>${game.minPlayers}</td><td>${game.maxPlayers}</td><td>${game.time} min</td><td>${game.age}</td><td>${game.coop}</td><td>${game.dice}</td><td>${game.deckBuilding}</td><td>${game.bluffing}</td><td>${game.tokenMovement}</td><td>${game.tokenPlacement}</td><td>${game.setCollecting}</td><td>${game.party}</td><td>${game.trivia}</td><td>${game.expansion}</td></tr>
+    `;
+}
 
 function handleReturnFromLogin() {
 	$('.login-to-main').on('click', event => {

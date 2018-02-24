@@ -21,20 +21,18 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', async (req, res) => {
-  let list = [];
-  let newGame = {};
-  await Shelf
-    .find(req.params.id)
+router.get('/:id', (req, res) => {
+  Shelf
+    .findById(req.params.id)
     .then(shelf => {
-        console.log(shelf);
-        return Game
-          .find()
-          .where('id')
-          .in(shelf.games)
-      })
-      .then(game => console.log('game: ' + game), newGame = game.serialize(), list.push(newGame), res.status(201).json(list));
-      console.log('list: ' + list);
+      return Game
+      .where('_id')
+      .in(shelf.games);
+    })
+    .then(games => {
+      const list = games.map(game => game.serialize());
+      res.json(list);
+    });
 });
 
 router.post('/', (req, res) => {
