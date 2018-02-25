@@ -2,7 +2,8 @@ var serverBase = '//localhost:8080/';
 var USERS_URL = serverBase + 'users';
 var LOGIN_URL = serverBase + 'auth/login';
 var SHELF_URL = serverBase + 'gameshelf';
-const GAME_TABLE = `<table><tr><th>Game</th><th>Min Players</th><th>Max Players</th><th>Play Time</th><th>Age to Play</th><th>Co-Op</th><th>Uses Dice</th><th>Deck Building</th><th>Bluffing</th><th>Token Movement</th><th>Token Placement</th><th>Set Collecting</th><th>Party Game</th><th>Trivia Game</th><th>Expansion</th></tr><tbody class = "myTable"></tbody></table>`
+var GAMES_URL = serverBase + 'games';
+const GAME_TABLE = `<table><tr><th>Game</th><th class = "rotate"><div><span>Min Players</span></div></th><th class = "rotate"><div><span>Max Players</span></div></th><th class = "rotate"><div><span>Play Time (min)</span></div></th><th class = "rotate"><div><span>Age to Play</span></div></th><th class = "rotate"><div><span>Co-Op</span></div></th><th class = "rotate"><div><span>Uses Dice</span></div></th><th class = "rotate"><div><span>Deck Building</span></div></th><th class = "rotate"><div><span>Bluffing</span></div></th><th class = "rotate"><div><span>Token Movement</span></div></th><th class = "rotate"><div><span>Token Placement</span></div></th><th class = "rotate"><div><span>Set Collecting</span></div></th><th class = "rotate"><div><span>Party Game</span></div></th><th class = "rotate"><div><span>Trivia Game</span></div></th><th class = "rotate"><div><span>Expansion</span></div></th></tr><tbody class = "myTable"></tbody></table>`
 
 function start() {
 	handleLoginButton();
@@ -61,6 +62,8 @@ function displayGameShelf(token) {
             $('.nav-header').removeClass("hidden");
             $('.My-Games').removeClass("hidden");
             renderShelf(data);
+            handleSearchClick();
+            handleLogoutClick();
         },
         error: function(error) {
             alert("Sorry, you are not logged in.");
@@ -109,7 +112,38 @@ function parseJwt (token) {
 
 function renderGame (game) {
     return `
-    <tr><td>${game.name}</td><td>${game.minPlayers}</td><td>${game.maxPlayers}</td><td>${game.time} min</td><td>${game.age}</td><td>${game.coop}</td><td>${game.dice}</td><td>${game.deckBuilding}</td><td>${game.bluffing}</td><td>${game.tokenMovement}</td><td>${game.tokenPlacement}</td><td>${game.setCollecting}</td><td>${game.party}</td><td>${game.trivia}</td><td>${game.expansion}</td></tr>
+    <tr><td>${game.name}</td><td>${game.minPlayers}</td><td>${game.maxPlayers}</td><td>${game.time}</td><td>${game.age}</td><td>${game.coop}</td><td>${game.dice}</td><td>${game.deckBuilding}</td><td>${game.bluffing}</td><td>${game.tokenMovement}</td><td>${game.tokenPlacement}</td><td>${game.setCollecting}</td><td>${game.party}</td><td>${game.trivia}</td><td>${game.expansion}</td></tr>
+    `;
+}
+
+function handleSearchClick() {
+    $('.search').on('click', event =>{
+        $('.js-game-list').html(`<span class="sr-only">Loading...</span>`);
+        var tokenData = parseJwt(localStorage.token);
+        $.ajax({
+            method: 'GET',
+            url: GAMES_URL,
+            beforeSend: function(xhr) {
+                if (localStorage.token) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
+                }
+              },
+            success: function(data) {
+                const gameList = data.map(game =>renderGameChoice(game));
+                $('.js-game-list').html(GAME_TABLE);
+                $('.myTable').html(gameList);
+                
+            },
+            error: function(error) {
+                
+            }
+        });
+    });
+}
+
+function renderGameChoice(game) {
+    return `
+    <tr><td>${game.name}</td><td>${game.minPlayers}</td><td>${game.maxPlayers}</td><td>${game.time}</td><td>${game.age}</td><td>${game.coop}</td><td>${game.dice}</td><td>${game.deckBuilding}</td><td>${game.bluffing}</td><td>${game.tokenMovement}</td><td>${game.tokenPlacement}</td><td>${game.setCollecting}</td><td>${game.party}</td><td>${game.trivia}</td><td>${game.expansion}</td></tr>
     `;
 }
 

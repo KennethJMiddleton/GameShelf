@@ -41,9 +41,8 @@ app.use('/auth/', authRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
-//app.use('/gameshelf', jwtAuth, shelfRouter);
-app.use('/gameshelf', shelfRouter);
-app.use('/games', gameRouter);
+app.use('/gameshelf', jwtAuth, shelfRouter);
+app.use('/games', jwtAuth, gameRouter);
 
 let server;
 

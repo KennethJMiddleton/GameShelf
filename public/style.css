@@ -58,7 +58,8 @@ nav {
   	padding-right: 4px;
   	padding-left: 4px;
   	border-right: 1px solid black;
-  	border-left: 1px solid black;
+	border-left: 1px solid black;
+	cursor: pointer;
 }
 
 .Welcome, .Login-Page, .Create-Account-Page {
@@ -76,4 +77,33 @@ button {
 
 input{
 	margin: 15px;
+}
+
+table {
+	margin-left: auto; 
+	margin-right: auto;
+	background-color: rgba(255,255,255, .5); 
+	padding: 10px;
+	padding-right: 68px;  
+}
+
+th.rotate {
+	height: 140px;
+	white-space: nowrap;
+}
+  
+th.rotate > div {
+	transform: 
+	  translate(20px, 50px)
+	  rotate(315deg);
+	width: 30px;
+}
+
+th.rotate > div > span {
+	border-bottom: 1px solid black;
+	padding: 5px 5px;
+}
+
+td {
+	border: 1px solid black;
 }
