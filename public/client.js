@@ -36,7 +36,15 @@ function handleLogin() {
             contentType: 'application/json',
             success: function(data) {
                 localStorage.token = data.authToken;
-                displayGameShelf(localStorage.token);
+                handleMyShelfClick();
+                handleSearchClick();
+                handleLogoutClick();
+                $('.Login-Page').addClass("hidden");
+                $('.Create-Account-Page').addClass("hidden");
+	            $('.Splash-Page').addClass("hidden");
+                $('.nav-header').removeClass("hidden");
+                $('.My-Games').removeClass("hidden");
+                document.getElementById("Login").reset();
             },
             error: function(error) {
                 $('.Login-Error').html("That username and password combination are not in our system. Please try again");
@@ -56,14 +64,7 @@ function displayGameShelf(token) {
             }
           },
         success: function(data) {
-            $('.Login-Page').addClass("hidden");
-            $('.Create-Account-Page').addClass("hidden");
-	        $('.Splash-Page').addClass("hidden");
-            $('.nav-header').removeClass("hidden");
-            $('.My-Games').removeClass("hidden");
             renderShelf(data);
-            handleSearchClick();
-            handleLogoutClick();
         },
         error: function(error) {
             alert("Sorry, you are not logged in.");
@@ -132,12 +133,36 @@ function handleSearchClick() {
                 const gameList = data.map(game =>renderGameChoice(game));
                 $('.js-game-list').html(GAME_TABLE);
                 $('.myTable').html(gameList);
-                
+                handleGameSelection();
+                handleMyShelfClick();
+                handleLogoutClick();
             },
             error: function(error) {
                 
             }
         });
+    });
+}
+
+function handleGameSelection(){
+
+}
+
+function handleMyShelfClick(){
+    $('.my-games').on('click', event =>{
+        displayGameShelf(localStorage.token);
+    });
+}
+
+function handleLogoutClick(){
+    $('.log-out').on('click', event =>{
+        localStorage.token = "";
+        $('.Login-Page').addClass("hidden");
+        $('.Create-Account-Page').addClass("hidden");
+        $('.Splash-Page').removeClass("hidden");
+        $('.Welcome').removeClass("hidden");
+        $('.nav-header').addClass("hidden");
+        $('.My-Games').addClass("hidden");
     });
 }
 
@@ -191,7 +216,15 @@ function handleCreation() {
                         contentType: 'application/json',
                         success: function(data) {
                             localStorage.token = data.authToken;
-                            displayGameShelf(localStorage.token);                            
+                            handleMyShelfClick();
+                            handleSearchClick();
+                            handleLogoutClick();
+                            $('.Login-Page').addClass("hidden");
+                            $('.Create-Account-Page').addClass("hidden");
+	                        $('.Splash-Page').addClass("hidden");
+                            $('.nav-header').removeClass("hidden");
+                            $('.My-Games').removeClass("hidden");
+                            document.getElementById("Create-Account").reset();                            
                         },
                         error: function(error) {
                             console.log(error);
