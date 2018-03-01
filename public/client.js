@@ -133,9 +133,8 @@ function handleSearchClick() {
                 const gameList = data.map(game =>renderGameChoice(game));
                 $('.js-game-list').html(GAME_TABLE);
                 $('.myTable').html(gameList);
-                handleGameSelection();
-                handleMyShelfClick();
-                handleLogoutClick();
+                $('.js-add-button').html(`<button type="button" class="add-game-button">Add to my Shelf</button>`)
+                handleAddGame(data);
             },
             error: function(error) {
                 
@@ -144,12 +143,44 @@ function handleSearchClick() {
     });
 }
 
-function handleGameSelection(){
+function handleAddGame(games){
+    $('.add-game-button').on('click', event =>{
+        console.log(games);
+        const gameName = $('input[name=game]:checked', '.myTable').attr('value');
+        console.log(gameName);
+        const gameID = getId(games, gameName);
+        console.log(gameID);
+        var tokenData = parseJwt(localStorage.token);
+        $.ajax({
+            method: 'PUT',
+            url: SHELF_URL + '/' + tokenData.user.myShelf + '/' + gameID,
+            beforeSend: function(xhr) {
+                if (localStorage.token) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
+                }
+              },
+            success: function() {
+                $('.js-add-response').html(gameName + " was added to your shelf.");
+            },
+            error: function(error) {
+                
+            }
+        });
+    }); 
+}
 
+function getId (list, name){
+    for(var i = 0, numGames = list.length; i < numGames; i++){
+        if(list[i].name == name){
+            return list[i].id;
+        }
+    }
 }
 
 function handleMyShelfClick(){
     $('.my-games').on('click', event =>{
+        $('.js-add-button').html("");
+        $('.js-add-response').html("");
         displayGameShelf(localStorage.token);
     });
 }
@@ -168,7 +199,7 @@ function handleLogoutClick(){
 
 function renderGameChoice(game) {
     return `
-    <tr><td>${game.name}</td><td>${game.minPlayers}</td><td>${game.maxPlayers}</td><td>${game.time}</td><td>${game.age}</td><td>${game.coop}</td><td>${game.dice}</td><td>${game.deckBuilding}</td><td>${game.bluffing}</td><td>${game.tokenMovement}</td><td>${game.tokenPlacement}</td><td>${game.setCollecting}</td><td>${game.party}</td><td>${game.trivia}</td><td>${game.expansion}</td></tr>
+    <tr><td><input type="radio" name="game" value="${game.name}" />${game.name}</td><td>${game.minPlayers}</td><td>${game.maxPlayers}</td><td>${game.time}</td><td>${game.age}</td><td>${game.coop}</td><td>${game.dice}</td><td>${game.deckBuilding}</td><td>${game.bluffing}</td><td>${game.tokenMovement}</td><td>${game.tokenPlacement}</td><td>${game.setCollecting}</td><td>${game.party}</td><td>${game.trivia}</td><td>${game.expansion}</td></tr>
     `;
 }
 

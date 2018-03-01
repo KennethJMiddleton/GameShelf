@@ -47,4 +47,15 @@ router.post('/', (req, res) => {
     });
 });
 
+router.put('/:shelfId/:gameId', (req,res) =>{
+  Shelf
+    .findById(req.params.shelfId)
+    .then(shelf => {shelf.games.push(req.params.gameId); return shelf.save();})
+    .then(response => res.status(201).json(response))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
+    });
+});
+
 module.exports = {router};

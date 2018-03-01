@@ -141,7 +141,7 @@ router.put('/:id', (req, res) => {
 
   User
     .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-    .then(post => res.status(201).json(post.serialize()))
+    .then(user => res.status(201).json(user.serialize()))
     .catch(err => res.status(500).json({ message: 'Internal server error' }));
 });
 
