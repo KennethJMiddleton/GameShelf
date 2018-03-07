@@ -45,10 +45,10 @@
         <form id="Login" class="Login">
           <h2>Please enter your username and password below</h2>
           <label for="user-input">Username</label> 
-          <input type=text id="user-input" class="js-user-input"><br>
+          <input type="text" id="user-input" class="js-user-input"><br>
           <label for="password-input"> Password</label>
-          <input type=password id="password-input" class="js-password-input"><br>
-          <button type=submit class="login-button">Login</button>
+          <input type="password" id="password-input" class="js-password-input"><br>
+          <button type="submit" class="login-button">Login</button>
           <section class="Login-Error"></section>
           <button type="button" class="login-to-main">Back to the Main Page</button>
         </form>
@@ -58,21 +58,94 @@
         <form id="Create-Account" class="Create-Account">
           <h2>Please create a username and password below</h2>
           <label for="user-create">Create a username</label> 
-          <input type=text id="user-create" class="js-user-create"><br>
+          <input type="text" id="user-create" class="js-user-create"><br>
           <label for="password-create"> Create a password</label>
-          <input type=password id="password-create" class="js-password-create"><br>
+          <input type="password" id="password-create" class="js-password-create"><br>
           <label for="password-confirm"> Confirm password</label>
-          <input type=password id="password-confirm" class="js-password-confirm"><br>
-          <button type=submit class="create-account-button">Create your Account</button><br>
+          <input type="password" id="password-confirm" class="js-password-confirm"><br>
+          <button type="submit" class="create-account-button">Create your Account</button><br>
           <section class="Create-Error"></section>
           <button type="button" class="create-to-main">Back to the Main Page</button>
         </form>
       </section>
     
       <section class="My-Games hidden">
-        <section class="js-game-list">Hello and welcome to Game Shelf, a great place to store your games! </section>
+        <section class="js-game-list">Hello and welcome to Game Shelf, a great place to store your games!</section>
         <section class="js-add-button"></section>
         <section class="js-add-response"></section>
+      </section>
+
+      <section class="Game-Add-Form">
+        <form id="New-Game" class="New-Game hidden">
+          <h2>Please fill out the form below to add a new game to the database</h2>
+          <label for="game-name">Please enter the FULL name of the game.</label> 
+          <input type="text" id="game-name" class="js-game-name"><br>
+          <label for="min-players">What is the minimum number of players?</label> 
+          <input type="number" id="min-players" class="js-min-players"><br>
+          <label for="max-players">What is the maximum number of players?</label> 
+          <input type="number" id="max-players" class="js-max-players"><br>
+          <label for="game-time">What is the average time it takes to play the game in minutes?</label> 
+          <input type="number" id="game-time" class="js-game-time"><br>
+          <label for="game-age">How old should someone be to play the game?</label> 
+          <input type="number" id="game-age" class="js-game-age"><br>
+          <p>Is this a cooperative game?</p>
+          <input type="radio" id="coop-t" name="coop" value="true">
+          <label for="coop-t">Yes</label>
+          <input type="radio" id="coop-f" name="coop" value="false">
+          <label for="coop-f">No</label><br>
+          <p>Does this game use dice?</p>
+          <input type="radio" id="dice-t" name="dice" value="true">
+          <label for="dice-t">Yes</label>
+          <input type="radio" id="dice-f" name="dice" value="false">
+          <label for="dice-f">No</label><br>
+          <p>Is this a deck building game?</p>
+          <input type="radio" id="deck-t" name="deck" value="true">
+          <label for="deck-t">Yes</label>
+          <input type="radio" id="deck-f" name="deck" value="false">
+          <label for="deck-f">No</label><br>
+          <p>Is this a bluffing game?</p>
+          <input type="radio" id="bluff-t" name="bluff" value="true">
+          <label for="bluff-t">Yes</label>
+          <input type="radio" id="bluff-f" name="bluff" value="false">
+          <label for="bluff-f">No</label><br>
+          <p>Does this game have you move pawns (or other tokens) around the playspace?</p>
+          <input type="radio" id="pawn-t" name="pawn" value="true">
+          <label for="pawn-t">Yes</label>
+          <input type="radio" id="pawn-f" name="pawn" value="false">
+          <label for="pawn-f">No</label><br>
+          <p>Is this a worker palcement game?</p>
+          <input type="radio" id="WP-t" name="WP" value="true">
+          <label for="WP-t">Yes</label>
+          <input type="radio" id="WP-f" name="WP" value="false">
+          <label for="WP-f">No</label><br>
+          <p>Is this a set collecting game?</p>
+          <input type="radio" id="set-t" name="set" value="true">
+          <label for="set-t">Yes</label>
+          <input type="radio" id="set-f" name="set" value="false">
+          <label for="set-f">No</label><br>
+          <p>Is this game fast paced with a good amount of inter-player interaction (i.e. a party game)?</p>
+          <input type="radio" id="party-t" name="party" value="true">
+          <label for="party-t">Yes</label>
+          <input type="radio" id="party-f" name="party" value="false">
+          <label for="party-f">No</label><br>
+          <p>Is this a trivia game?</p>
+          <input type="radio" id="trivia-t" name="trivia" value="true">
+          <label for="trivia-t">Yes</label>
+          <input type="radio" id="trivia-f" name="trivia" value="false">
+          <label for="trivia-f">No</label><br>
+          <p>Does this game require another game to be played (i.e. is this an expansion)?</p>
+          <input type="radio" id="exp-t" name="exp" value="true">
+          <label for="exp-t">Yes</label>
+          <input type="radio" id="exp-f" name="exp" value="false">
+          <label for="exp-f">No</label><br>
+          <button type="button" class="add-new-game-button">Create this Game</button>
+        </form>
+      </section>
+      <section class="Game-Check-Space hidden">
+        Is this information all correct? Double check everything before we add it to the database.
+        <section class="Game-Review"></section>
+        <button type="button" class="create-game-button">All Correct</button>
+        <button type="button" class="fix-game-button">Oops I need to fix something</button>
       </section>
     
     </main>

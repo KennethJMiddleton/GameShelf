@@ -133,8 +133,9 @@ function handleSearchClick() {
                 const gameList = data.map(game =>renderGameChoice(game));
                 $('.js-game-list').html(GAME_TABLE);
                 $('.myTable').html(gameList);
-                $('.js-add-button').html(`<button type="button" class="add-game-button">Add to my Shelf</button>`)
+                $('.js-add-button').html(`<button type="button" class="add-game-button">Add to my Shelf</button><br><button type="button" class="generate-game-button">Add to this list</button>`)
                 handleAddGame(data);
+                handleGenerateGame();
             },
             error: function(error) {
                 
@@ -177,6 +178,87 @@ function getId (list, name){
     }
 }
 
+function handleGenerateGame() {
+    $('.generate-game-button').on('click', event =>{
+        $('.nav-header').addClass("hidden");
+        $('.My-Games').addClass("hidden");
+        $('.New-Game').removeClass("hidden");
+        handleGameSubmission();
+    });
+}
+
+function handleGameSubmission(){
+    $('.add-new-game-button').on('click', event => {
+        var newGame = {
+            name : $(".js-game-name").val(),
+            minPlayers : parseInt($(".js-min-players").val()),
+            maxPlayers : parseInt($(".js-max-players").val()),
+            time : parseInt($(".js-game-time").val()),
+            age : parseInt($(".js-game-age").val()),
+            coop : $("input[name=coop]:checked").val()=="true",
+            dice : $("input[name=dice]:checked").val()=="true",
+            deckBuilding : $("input[name=deck]:checked").val()=="true",
+            bluffing : $("input[name=bluff]:checked").val()=="true",   
+            tokenMovement : $("input[name=pawn]:checked").val()=="true",
+            tokenPlacement : $("input[name=WP]:checked").val()=="true",
+            setCollecting : $("input[name=set]:checked").val()=="true",
+            party : $("input[name=party]:checked").val()=="true",
+            trivia : $("input[name=trivia]:checked").val()=="true",
+            expansion : $("input[name=exp]:checked").val()=="true"
+        }
+        gameCheck(newGame);    
+    });
+}
+
+function gameCheck(game) {
+    $('.New-Game').addClass("hidden");
+    $('.Game-Check-Space').removeClass("hidden");
+    $('.Game-Review').html(GAME_TABLE)
+    $('.myTable').html(renderGame(game));
+    handleDBSubmission(game);
+    handleCorrection();
+}
+
+function handleDBSubmission(game){
+    $('.create-game-button').on('click', event =>{
+        document.getElementById("New-Game").reset();
+        $('.Game-Check-Space').addClass("hidden");
+        $('.Game-Review').html("");
+        $.ajax({
+            method: 'POST',
+            url: GAMES_URL,
+            data: JSON.stringify(game),
+            dataType: 'json',
+            contentType: 'application/json',
+            beforeSend: function(xhr) {
+                if (localStorage.token) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
+                }
+              },
+            success: function(data) {
+                $('.Login-Page').addClass("hidden");
+                $('.Create-Account-Page').addClass("hidden");
+	            $('.Splash-Page').addClass("hidden");
+                $('.nav-header').removeClass("hidden");
+                $('.My-Games').removeClass("hidden");
+                $('.js-add-button').html("");
+                $('.js-game-list').html(game.name + " was added to the database successfully! <br> Search again and you will find it on the full list and can add it to your Shelf from there");
+            },
+            error: function(error) {
+
+            }
+        });
+    });
+}
+
+function handleCorrection(){
+    $('.fix-game-button').on('click', event =>{
+        $('.New-Game').removeClass("hidden");
+        $('.Game-Check-Space').addClass("hidden");
+        $('.Game-Review').html("");
+    });
+}
+
 function handleMyShelfClick(){
     $('.my-games').on('click', event =>{
         $('.js-add-button').html("");
@@ -188,6 +270,9 @@ function handleMyShelfClick(){
 function handleLogoutClick(){
     $('.log-out').on('click', event =>{
         localStorage.token = "";
+        $('.js-add-button').html("");
+        $('.js-add-response').html("");
+        $('.js-game-list').html("Hello and welcome to Game Shelf, a great place to store your games!");
         $('.Login-Page').addClass("hidden");
         $('.Create-Account-Page').addClass("hidden");
         $('.Splash-Page').removeClass("hidden");
