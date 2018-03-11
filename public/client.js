@@ -145,11 +145,8 @@ function handleSearchClick() {
 
 function handleAddGame(games){
     $('.add-game-button').on('click', event =>{
-        console.log(games);
         const gameName = $('input[name=game]:checked', '.myTable').attr('value');
-        console.log(gameName);
         const gameID = getId(games, gameName);
-        console.log(gameID);
         var tokenData = parseJwt(localStorage.token);
         $.ajax({
             method: 'PUT',
