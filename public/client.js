@@ -1,8 +1,7 @@
-var serverBase = '//localhost:8080/';
-var USERS_URL = serverBase + 'users';
-var LOGIN_URL = serverBase + 'auth/login';
-var SHELF_URL = serverBase + 'gameshelf';
-var GAMES_URL = serverBase + 'games';
+var USERS_URL = '/users';
+var LOGIN_URL = '/auth/login';
+var SHELF_URL = '/gameshelf';
+var GAMES_URL = '/games';
 const GAME_TABLE = `<table><tr><th>Game</th><th class = "rotate"><div><span>Min Players</span></div></th><th class = "rotate"><div><span>Max Players</span></div></th><th class = "rotate"><div><span>Play Time (min)</span></div></th><th class = "rotate"><div><span>Age to Play</span></div></th><th class = "rotate"><div><span>Co-Op</span></div></th><th class = "rotate"><div><span>Uses Dice</span></div></th><th class = "rotate"><div><span>Deck Building</span></div></th><th class = "rotate"><div><span>Bluffing</span></div></th><th class = "rotate"><div><span>Token Movement</span></div></th><th class = "rotate"><div><span>Token Placement</span></div></th><th class = "rotate"><div><span>Set Collecting</span></div></th><th class = "rotate"><div><span>Party Game</span></div></th><th class = "rotate"><div><span>Trivia Game</span></div></th><th class = "rotate"><div><span>Expansion</span></div></th></tr><tbody class = "myTable"></tbody></table>`
 
 function start() {
