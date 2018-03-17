@@ -2,19 +2,32 @@ var USERS_URL = '/users';
 var LOGIN_URL = '/auth/login';
 var SHELF_URL = '/gameshelf';
 var GAMES_URL = '/games';
+var ADD_TO_SHELF_LIST = "";
+var NEW_GAME = "";
 const GAME_TABLE = `<table><tr><th>Game</th><th class = "rotate"><div><span>Min Players</span></div></th><th class = "rotate"><div><span>Max Players</span></div></th><th class = "rotate"><div><span>Play Time (min)</span></div></th><th class = "rotate"><div><span>Age to Play</span></div></th><th class = "rotate"><div><span>Co-Op</span></div></th><th class = "rotate"><div><span>Uses Dice</span></div></th><th class = "rotate"><div><span>Deck Building</span></div></th><th class = "rotate"><div><span>Bluffing</span></div></th><th class = "rotate"><div><span>Token Movement</span></div></th><th class = "rotate"><div><span>Token Placement</span></div></th><th class = "rotate"><div><span>Set Collecting</span></div></th><th class = "rotate"><div><span>Party Game</span></div></th><th class = "rotate"><div><span>Trivia Game</span></div></th><th class = "rotate"><div><span>Expansion</span></div></th></tr><tbody class = "myTable"></tbody></table>`
 
 function start() {
 	handleLoginButton();
-	handleCreateAccount();
+    handleCreateAccount();
+    handleLogin();
+	handleReturnFromLogin();
+    handleMyShelfClick();
+    handleSearchClick();
+    handleLogoutClick();
+    handleAddGame();
+    handleGenerateGame();
+    handleGameSubmission();
+    handleDBSubmission();
+    handleCorrection();
+    handleCreation();
+    handleReturnFromCreate();
+    handleBackButton ();
 }
 
 function handleLoginButton() {
 	$('.open-login-button').on('click', event => {
 		$('.Welcome').addClass("hidden");
 		$('.Login-Page').removeClass("hidden");
-		handleLogin();
-		handleReturnFromLogin();
 	});
 }
 
@@ -35,9 +48,6 @@ function handleLogin() {
             contentType: 'application/json',
             success: function(data) {
                 localStorage.token = data.authToken;
-                handleMyShelfClick();
-                handleSearchClick();
-                handleLogoutClick();
                 $('.Login-Page').addClass("hidden");
                 $('.Create-Account-Page').addClass("hidden");
 	            $('.Splash-Page').addClass("hidden");
@@ -133,8 +143,7 @@ function handleSearchClick() {
                 $('.js-game-list').html(GAME_TABLE);
                 $('.myTable').html(gameList);
                 $('.js-add-button').html(`<button type="button" class="add-game-button">Add to my Shelf</button><br><button type="button" class="generate-game-button">Add to this list</button>`)
-                handleAddGame(data);
-                handleGenerateGame();
+                ADD_TO_SHELF_LIST = data;
             },
             error: function(error) {
                 
@@ -143,11 +152,13 @@ function handleSearchClick() {
     });
 }
 
-function handleAddGame(games){
-    $('.add-game-button').on('click', event =>{
+function handleAddGame(){
+    $('.js-add-button').on('click', '.add-game-button', event =>{
+        console.log("you did it")
         const gameName = $('input[name=game]:checked', '.myTable').attr('value');
-        const gameID = getId(games, gameName);
-        var tokenData = parseJwt(localStorage.token);
+        const gameID = getId(ADD_TO_SHELF_LIST, gameName);
+        if(gameName){
+            var tokenData = parseJwt(localStorage.token);
         $.ajax({
             method: 'PUT',
             url: SHELF_URL + '/' + tokenData.user.myShelf + '/' + gameID,
@@ -163,6 +174,11 @@ function handleAddGame(games){
                 
             }
         });
+        }
+        else {
+            $('.js-add-response').html("You must select a game!");
+        }
+        
     }); 
 }
 
@@ -175,11 +191,10 @@ function getId (list, name){
 }
 
 function handleGenerateGame() {
-    $('.generate-game-button').on('click', event =>{
+    $('.js-add-button').on('click', '.generate-game-button', event =>{
         $('.nav-header').addClass("hidden");
         $('.My-Games').addClass("hidden");
         $('.New-Game').removeClass("hidden");
-        handleGameSubmission();
     });
 }
 
@@ -211,11 +226,10 @@ function gameCheck(game) {
     $('.Game-Check-Space').removeClass("hidden");
     $('.Game-Review').html(GAME_TABLE)
     $('.myTable').html(renderGame(game));
-    handleDBSubmission(game);
-    handleCorrection();
+    NEW_GAME = game;
 }
 
-function handleDBSubmission(game){
+function handleDBSubmission(){
     $('.create-game-button').on('click', event =>{
         document.getElementById("New-Game").reset();
         $('.Game-Check-Space').addClass("hidden");
@@ -223,7 +237,7 @@ function handleDBSubmission(game){
         $.ajax({
             method: 'POST',
             url: GAMES_URL,
-            data: JSON.stringify(game),
+            data: JSON.stringify(NEW_GAME),
             dataType: 'json',
             contentType: 'application/json',
             beforeSend: function(xhr) {
@@ -238,12 +252,13 @@ function handleDBSubmission(game){
                 $('.nav-header').removeClass("hidden");
                 $('.My-Games').removeClass("hidden");
                 $('.js-add-button').html("");
-                $('.js-game-list').html(game.name + " was added to the database successfully! <br> Search again and you will find it on the full list and can add it to your Shelf from there");
+                $('.js-game-list').html(NEW_GAME.name + " was added to the database successfully! <br> Search again and you will find it on the full list and can add it to your Shelf from there");
             },
             error: function(error) {
 
             }
         });
+        NEW_GAME = "";
     });
 }
 
@@ -252,6 +267,36 @@ function handleCorrection(){
         $('.New-Game').removeClass("hidden");
         $('.Game-Check-Space').addClass("hidden");
         $('.Game-Review').html("");
+    });
+}
+
+function handleBackButton (){
+    $('.back-button').on('click', event => {
+        $('.nav-header').removeClass("hidden");
+        $('.My-Games').removeClass("hidden");
+        $('.New-Game').addClass("hidden");
+        $('.js-game-list').html(`<span class="sr-only">Loading...</span>`);
+        var tokenData = parseJwt(localStorage.token);
+        $.ajax({
+            method: 'GET',
+            url: GAMES_URL,
+            beforeSend: function(xhr) {
+                if (localStorage.token) {
+                  xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.token);
+                }
+              },
+            success: function(data) {
+                const gameList = data.map(game =>renderGameChoice(game));
+                $('.js-game-list').html(GAME_TABLE);
+                $('.myTable').html(gameList);
+                $('.js-add-button').html(`<button type="button" class="add-game-button">Add to my Shelf</button><br><button type="button" class="generate-game-button">Add to this list</button>`)
+                ADD_TO_SHELF_LIST = data;
+                
+            },
+            error: function(error) {
+                
+            }
+        });
     });
 }
 
@@ -268,7 +313,7 @@ function handleLogoutClick(){
         localStorage.token = "";
         $('.js-add-button').html("");
         $('.js-add-response').html("");
-        $('.js-game-list').html("Hello and welcome to Game Shelf, a great place to store your games!");
+        $('.js-game-list').html("Hello and welcome to Game Shelf, a great place to store your games! Click on My Games to get started.");
         $('.Login-Page').addClass("hidden");
         $('.Create-Account-Page').addClass("hidden");
         $('.Splash-Page').removeClass("hidden");
@@ -296,8 +341,6 @@ function handleCreateAccount() {
 	$('.open-create-account').on('click', event => {
 		$('.Welcome').addClass("hidden");
 		$('.Create-Account-Page').removeClass("hidden");
-		handleCreation();
-		handleReturnFromCreate();
 	});
 }
 
@@ -328,9 +371,6 @@ function handleCreation() {
                         contentType: 'application/json',
                         success: function(data) {
                             localStorage.token = data.authToken;
-                            handleMyShelfClick();
-                            handleSearchClick();
-                            handleLogoutClick();
                             $('.Login-Page').addClass("hidden");
                             $('.Create-Account-Page').addClass("hidden");
 	                        $('.Splash-Page').addClass("hidden");
