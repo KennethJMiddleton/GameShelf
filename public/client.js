@@ -24,6 +24,7 @@ function start() {
     handleBackButton ();
 }
 
+//switches to the login page from the main page
 function handleLoginButton() {
 	$('.open-login-button').on('click', event => {
 		$('.Welcome').addClass("hidden");
@@ -31,6 +32,7 @@ function handleLoginButton() {
 	});
 }
 
+//allows the user to login to their account and displays their homepage
 function handleLogin() {
 	$('.Login').on('submit', event => {
 		event.preventDefault();
@@ -62,6 +64,7 @@ function handleLogin() {
 	});
 }
 
+//generates the primary view on the user page
 function displayGameShelf(token) {
 	$('.Login-Error').empty();
     $.ajax({
@@ -87,6 +90,7 @@ function displayGameShelf(token) {
     });
 }
 
+//populates the users list of games
 function renderShelf(gamelist) {
     $('.js-game-list').html(`<span class="sr-only">Loading...</span>`);
     var tokenData = parseJwt(localStorage.token);
@@ -114,18 +118,21 @@ function renderShelf(gamelist) {
     });
 }
 
+//pulls data from the JWT into a usable form
 function parseJwt (token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace('-', '+').replace('_', '/');
     return JSON.parse(window.atob(base64));
 }
 
+//fills in the game data for each line of the display
 function renderGame (game) {
     return `
     <tr><td>${game.name}</td><td>${game.minPlayers}</td><td>${game.maxPlayers}</td><td>${game.time}</td><td>${game.age}</td><td>${game.coop}</td><td>${game.dice}</td><td>${game.deckBuilding}</td><td>${game.bluffing}</td><td>${game.tokenMovement}</td><td>${game.tokenPlacement}</td><td>${game.setCollecting}</td><td>${game.party}</td><td>${game.trivia}</td><td>${game.expansion}</td></tr>
     `;
 }
 
+// loads the master list of games for addition to a users list
 function handleSearchClick() {
     $('.search').on('click', event =>{
         $('.js-game-list').html(`<span class="sr-only">Loading...</span>`);
@@ -152,6 +159,8 @@ function handleSearchClick() {
     });
 }
 
+
+//adds a game from the master list to a users list
 function handleAddGame(){
     $('.js-add-button').on('click', '.add-game-button', event =>{
         console.log("you did it")
@@ -182,6 +191,7 @@ function handleAddGame(){
     }); 
 }
 
+//pulls out the game ID form the data list
 function getId (list, name){
     for(var i = 0, numGames = list.length; i < numGames; i++){
         if(list[i].name == name){
@@ -190,6 +200,7 @@ function getId (list, name){
     }
 }
 
+//opens window for adding a game to the master list
 function handleGenerateGame() {
     $('.js-add-button').on('click', '.generate-game-button', event =>{
         $('.nav-header').addClass("hidden");
@@ -198,6 +209,7 @@ function handleGenerateGame() {
     });
 }
 
+//pull user infor into an object and preps to upload to master list
 function handleGameSubmission(){
     $('.add-new-game-button').on('click', event => {
         var newGame = {
@@ -221,6 +233,7 @@ function handleGameSubmission(){
     });
 }
 
+//displays new game information for user review before submission
 function gameCheck(game) {
     $('.New-Game').addClass("hidden");
     $('.Game-Check-Space').removeClass("hidden");
@@ -229,6 +242,7 @@ function gameCheck(game) {
     NEW_GAME = game;
 }
 
+//adds new game to master list
 function handleDBSubmission(){
     $('.create-game-button').on('click', event =>{
         document.getElementById("New-Game").reset();
@@ -262,6 +276,7 @@ function handleDBSubmission(){
     });
 }
 
+//allows user to edit new game information
 function handleCorrection(){
     $('.fix-game-button').on('click', event =>{
         $('.New-Game').removeClass("hidden");
@@ -270,6 +285,7 @@ function handleCorrection(){
     });
 }
 
+//takes away from adding a new game back to the master list display 
 function handleBackButton (){
     $('.back-button').on('click', event => {
         $('.nav-header').removeClass("hidden");
@@ -300,6 +316,7 @@ function handleBackButton (){
     });
 }
 
+//displays personal list of games
 function handleMyShelfClick(){
     $('.my-games').on('click', event =>{
         $('.js-add-button').html("");
@@ -308,9 +325,12 @@ function handleMyShelfClick(){
     });
 }
 
+//logs user out of their account
 function handleLogoutClick(){
     $('.log-out').on('click', event =>{
         localStorage.token = "";
+        ADD_TO_SHELF_LIST = "";
+        NEW_GAME = "";
         $('.js-add-button').html("");
         $('.js-add-response').html("");
         $('.js-game-list').html("Hello and welcome to Game Shelf, a great place to store your games! Click on My Games to get started.");
@@ -323,12 +343,14 @@ function handleLogoutClick(){
     });
 }
 
+//fills in the game data for the master list display with radio buttons
 function renderGameChoice(game) {
     return `
     <tr><td><input type="radio" name="game" value="${game.name}" />${game.name}</td><td>${game.minPlayers}</td><td>${game.maxPlayers}</td><td>${game.time}</td><td>${game.age}</td><td>${game.coop}</td><td>${game.dice}</td><td>${game.deckBuilding}</td><td>${game.bluffing}</td><td>${game.tokenMovement}</td><td>${game.tokenPlacement}</td><td>${game.setCollecting}</td><td>${game.party}</td><td>${game.trivia}</td><td>${game.expansion}</td></tr>
     `;
 }
 
+//returns user from the login page to the main page
 function handleReturnFromLogin() {
 	$('.login-to-main').on('click', event => {
 		$('.Login-Page').addClass("hidden");
@@ -337,6 +359,7 @@ function handleReturnFromLogin() {
 	});
 }
 
+//switches to the account creation page from the main page
 function handleCreateAccount() {
 	$('.open-create-account').on('click', event => {
 		$('.Welcome').addClass("hidden");
@@ -344,6 +367,7 @@ function handleCreateAccount() {
 	});
 }
 
+//submits information for account creation and displays the new users home page
 function handleCreation() {
 	$('.Create-Account').on('submit', event => {
 		event.preventDefault();
@@ -395,6 +419,7 @@ function handleCreation() {
 	});
 }
 
+//returns user from the account creation page to the main page
 function handleReturnFromCreate() {
 	$('.create-to-main').on('click', event => {
 		$('.Create-Account-Page').addClass("hidden");
